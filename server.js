@@ -7,6 +7,8 @@ const {
     Users
 } = require('./db')
 
+const PORT = process.env.PORT || 5678
+
 const app = exp()
 const vendorRoute = require('./routes/vendorRoute')
 const productRoute = require('./routes/productRoute')
@@ -120,5 +122,5 @@ app.post('/cart', async (req, res) => {
 
 db.sync()
     .then(() => {
-        app.listen(5678)
+        app.listen(PORT)
     })
