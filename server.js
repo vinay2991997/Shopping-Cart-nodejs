@@ -8,6 +8,8 @@ const {
 } = require('./db')
 
 const app = exp()
+const vendorRoute = require('./routes/vendorRoute')
+const productRoute = require('./routes/productRoute')
 
 app.use(exp.json())
 app.use(exp.urlencoded({
@@ -57,121 +59,10 @@ app.post('/login', async (req, res) => {
 
 
 // Vendor
-app.get('/vendor', async (req, res) => {
-
-    // returns the list of vendors
-    const vendors = await Vendors.findAll()
-    res.send(vendors)
-})
-
-app.post('/vendor', async (req, res) => {
-
-    try {
-
-        // check if name already exist
-        let vendorCnt = await Vendors.count({ where: { name: req.body.name } })
-        if (vendorCnt > 0) {
-            throw new Error('Vendor Already Exist!')
-        }
-
-        const result = await Vendors.create({
-            name: req.body.name
-        })
-        res.send({ success: true })
-    } catch (e) {
-        res.send({ success: false, error: e.message })
-    }
-})
-
-app.delete('/vendor/:id', async (req, res) => {
-
-    // delete the vendor
-    try {
-        let vendorCnt = await Vendors.count({ where: { id: req.params.id } })
-        if (vendorCnt == 0) {
-            throw new Error('Vendor Does not Exist!')
-        }
-        await Vendors.destroy({where:{id:req.params.id}})
-
-        // delete all products related to this vendor
-        await Products.destroy({where:{vendor_id : req.params.id}})
-        
-        // TODO : remove products from all the carts for this vendor
-        // Cart.destroy({where : {}})
-
-        res.send({success:true})
-
-    } catch (e) {
-        res.send({ success: false, error: e.message })
-    }
-})
-
+app.use('/vendor',vendorRoute)
 
 // Product
-app.get('/product', async (req, res) => {
-
-    // List all the products
-    const products = await Products.findAll()
-    res.send(products)
-})
-
-app.post('/product', async (req, res) => {
-
-    // check if product name already exist
-    try {
-
-        // check if name already exist
-        let productCnt = await Products.count({ where: { name: req.body.name, vendor_id : req.body.vendor_id } })
-        if (productCnt > 0) {
-            throw new Error('Product Already Exist for this vendor!')
-        }
-
-        let vendorCnt = await Vendors.count({ where: { id : req.body.vendor_id } })
-        if (vendorCnt == 0) {
-            throw new Error('vendor doesnot exist!')
-        }
-
-        if (req.body.price < 0) {
-            throw new Error('Price can not be negative')
-        }
-
-        if (req.body.quantity == 0) {
-            throw new Error('Quantity can not be negative')
-        }
-
-
-        const result = await Products.create({
-            name: req.body.name,
-            price : req.body.price,
-            vendor_id : req.body.vendor_id,
-            quantity : req.body.quantity,
-        })
-
-        res.send({ success: true })
-    } catch (e) {
-        res.send({ success: false, error: e.message })
-    }
-})
-
-app.delete('/product/:pid', async (req, res) => {
-
-    // remove the product
-    // remove that product from the cart
-
-    try {
-        let productCnt = await Products.count({ where: { id:req.params.pid } })
-        if (productCnt == 0) {
-            throw new Error('Product does not exist!')
-        }
-
-        Products.destroy({where:{id:req.params.pid}})
-        res.send({success:true})
-
-    } catch (e) {
-        res.send({ success: false, error: e.message })
-    }
-})
-
+app.use('/product', productRoute)
 
 // Cart
 app.get('/cart', async (req, res) => {
