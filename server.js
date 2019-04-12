@@ -20,7 +20,7 @@ app.use('/',
     exp.static(__dirname + '/public'))
 
 let currentUser = null
-
+let currentUserId = null
 
 // User
 app.get('/users', async (req, res) => {
@@ -30,6 +30,7 @@ app.get('/users', async (req, res) => {
 
 app.get('/logout', async (req, res) => {
     currentUser = null
+    currentUserId = null
     res.send("you have been loggedOut!!")
 })
 
@@ -40,9 +41,9 @@ app.get('/login', async (req, res) => {
             username = 'Anonymous'
             throw new Error()
         }
-        res.send({success : true, message : `Hi ${username}`, user:username})
+        res.send({success : true, message : `Hi ${username}`, user:username, userId:currentUserId})
     } catch (e) {
-        res.send({success : false, message : `Hi Anonymous`, user:'Anonymous'})
+        res.send({success : false, message : `Hi Anonymous`, user:'Anonymous' , userId:-1})
     }
 })
 
@@ -54,7 +55,8 @@ app.post('/login', async (req, res) => {
         })
     }
     currentUser = req.body.name
-    res.send({success : true, message : `Hi ${currentUser}`, user:currentUser})
+    currentUserId = (await Users.findOne({where : {name : req.body.name}})).id
+    res.send({success : true, message : `Hi ${currentUser}`, user:currentUser, userId : currentUserId})
 })
 
 
@@ -72,12 +74,13 @@ app.get('/cart', async (req, res) => {
         if(currentUser == null){
             throw new Error('Please Login First')
         }
-        const result = await Cart.findAll({where : {uname : currentUser}})
+        const result = await Cart.findAll({
+            where : {userId : currentUserId},
+            include : [Products]
+        })
         let total = 0
-        let tempProduct = null
-        for(let product of result ) {
-            tempProduct = await Products.findOne({where : {id : product.product_id}})
-            total += tempProduct.price * product.quantity
+        for(let item of result ) {
+            total += item.product.price * item.quantity
         }
         result.push({total : total})
         console.log(`Final Total : ${total}`)
@@ -96,16 +99,16 @@ app.post('/cart', async (req, res) => {
             throw new Error('Please Login First')
         }
 
-        const productCnt = await Cart.count({where : {product_id : req.body.product_id, uname : currentUser}})
+        const productCnt = await Cart.count({where : {productId : req.body.productId, userId : currentUserId}})
         if (productCnt == 0) {
             const result = await Cart.create({
-                product_id : req.body.product_id,
+                productId : req.body.productId,
                 quantity : 1,
-                uname : currentUser
+                userId : currentUserId
             })
         }
         else {
-            await Cart.increment('quantity',{where : {product_id : req.body.product_id, uname : currentUser}})
+            await Cart.increment('quantity',{where : {productId : req.body.productId, userId : currentUserId}})
         }
         res.send({success:true, message:"Added to cart Successfully"})
     } catch (e) {

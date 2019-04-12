@@ -43,12 +43,6 @@ vendor.delete('/:id', async (req, res) => {
         }
         await Vendors.destroy({where:{id:req.params.id}})
 
-        // delete all products related to this vendor
-        await Products.destroy({where:{vendor_id : req.params.id}})
-        
-        // TODO : remove products from all the carts for this vendor
-        // Cart.destroy({where : {}})
-
         res.send({success:true})
 
     } catch (e) {
