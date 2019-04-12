@@ -16,7 +16,7 @@ function productList() {
             
             $('#productList').append(`<li>Name | Price | Quantity | Vendor</li>`)
             data.forEach(element => {
-                $('#productList').append(`<li value="${element.id}">${element.name} | ${element.price} | ${element.quantity} | ${element.vendor_id}
+                $('#productList').append(`<li value="${element.id}">${element.name} | ${element.price} | ${element.quantity} | ${element.vendor.name}
                 <button type="submit" id="addToCart" onclick="addToCart(${element.id})">Add To Cart</button>
                 <button type="submit" id="deleteProduct" onclick="deleteProduct(${element.id})">Delete Product</button>
                 </li>`)
@@ -29,7 +29,7 @@ function addProduct() {
             {
                 name: $('#productName').val(),
                 price : $('#price').val(),
-                vendor_id : $('#vendorOption').val(),
+                vendorId : $('#vendorOption').val(),
                 quantity : $('#quantity').val()
             },
             (data) => {
@@ -46,7 +46,7 @@ function addProduct() {
 function addToCart(id){
     $.post('/cart',
         {
-            product_id : id
+            productId : id
         },
         (data) => {
             if(data.success) {
