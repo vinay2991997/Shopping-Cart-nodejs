@@ -1,0 +1,27 @@
+{
+  "name": "Shopping_Cart",
+  "version": "1.0.0",
+  "description": "",
+  "main": "db.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "sequelize": "^5.3.3",
+    "sqlite3": "^4.0.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinay2991997/shopping-cart-nodejs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vinay2991997/shopping-cart-nodejs/issues"
+  },
+  "homepage": "https://github.com/vinay2991997/shopping-cart-nodejs#readme"
+}
