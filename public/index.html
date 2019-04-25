@@ -1,17 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shopping Website</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="shopping.js"></script>
+
+    <style>
+        #navul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .li {
+            float: left;
+        }
+
+        .li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .li a:hover:not(.active) {
+            background-color: #111;
+        }
+
+        .active {
+            background-color: #4CAF50;
+        }
+    </style>
+
 </head>
+
 <body>
-    <p id="msg"></p>
-    <input type="text" placeholder="username" id="usrnametxt">
-    <button type="submit" id="login">Login</button>
-    <button type="submit" id="logout" hidden>Logout</button>
+
+    <ul id="navul">
+        <li class="li"><a href="/vendor.html">Vendor</a></li>
+        <li class="li"><a href="/product.html">Product</a></li>
+        <li class="li"><a href="cart.html">Cart</a></li>
+        <li class="li" style="float:right"><a class="active" href="/index.html">Login</a></li>
+    </ul>
+    <div class="container">
+        <p id="msg"></p>
+        <div class="row">
+            <input type="text" placeholder="username" id="usrnametxt" class="form-control-3">
+            <div class="col-2">
+                <button type="submit" id="login" class="offset-1 btn btn-primary btn-sm">Login</button>
+                <button type="submit" id="logout" class="btn btn-primary btn-sm col-offset-6">Logout</button>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

@@ -23,7 +23,7 @@ function refreshList() {
     (data) => {
         $('#vendorList').empty()
         data.forEach(element => {
-            $('#vendorList').append(`<li>${element.name} <button type="submit" id="delVendor" onclick="deleteVendor(${element.id})">X</button> </li>`)
+            $('#vendorList').append(`<li>${element.name} <button type="submit" class="btn btn-danger btn-sm" id="delVendor" onclick="deleteVendor(${element.id})">Delete</button> </li>`)
         });
     })
 }

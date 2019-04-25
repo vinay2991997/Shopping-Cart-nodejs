@@ -17,8 +17,8 @@ function productList() {
             $('#productList').append(`<li>Name | Price | Quantity | Vendor</li>`)
             data.forEach(element => {
                 $('#productList').append(`<li value="${element.id}">${element.name} | ${element.price} | ${element.quantity} | ${element.vendor.name}
-                <button type="submit" id="addToCart" onclick="addToCart(${element.id})">Add To Cart</button>
-                <button type="submit" id="deleteProduct" onclick="deleteProduct(${element.id})">Delete Product</button>
+                <button type="submit" class="btn btn-primary btn-sm" id="addToCart" onclick="addToCart(${element.id})">Add To Cart</button>
+                <button type="submit" class="btn btn-danger btn-sm" id="deleteProduct" onclick="deleteProduct(${element.id})">Delete Product</button>
                 </li>`)
             });
         })
